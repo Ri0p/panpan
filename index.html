@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pan Pan Bakery & Bistro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#home">
+        <span class="brand-mark">PP</span>
+        <span class="brand-copy">
+          <strong>Pan Pan</strong>
+          <small>Bakery & Bistro</small>
+        </span>
+      </a>
+
+      <nav class="site-nav">
+        <a href="#home">Дома</a>
+        <a href="#about">За Нас</a>
+        <a href="#menu">Мени</a>
+        <a href="#contact">Контакт</a>
+        <a href="#account">Профил</a>
+      </nav>
+
+      <div class="header-actions">
+        <span id="session-badge" class="session-badge">Не сте најавени</span>
+        <button id="logout-btn" class="ghost-btn hidden" type="button">Одјава</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Artisan Bakery</p>
+          <h1>Свежи француски пецива и онлајн нарачка на едно место</h1>
+          <p class="lead">
+            Оваа демо копија е инспирирана од `panpan.mk`, но додава вистински тек за корисници:
+            најава, профил, нарачка и админ преглед со Excel извоз.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#account">Најава / Регистрација</a>
+            <a class="secondary-btn" href="#menu">Погледни мени</a>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <p class="card-title">Демо пристап</p>
+          <p><strong>Admin:</strong> `admin@panpan.mk` / `panpan123`</p>
+          <p><strong>Клиент:</strong> `demo@panpan.mk` / `demo123`</p>
+          <p>Нови регистрации одат на одобрување кај админ пред корисникот да може да се најави.</p>
+          <ul>
+            <li>Најава и регистрација</li>
+            <li>Нарачки за достава или подигање</li>
+            <li>Историја на нарачки по корисник</li>
+            <li>Админ табела и Excel export</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="about" class="info-grid">
+        <article class="panel story-panel">
+          <p class="section-label">За Нас</p>
+          <h2>Утрото не е исто без свеж леб и кроасан</h2>
+          <p>
+            Во Pan Pan секој ден започнува со печење багети, фокача, кроасани и бриош.
+            Во оваа верзија го задржуваме тој feel, а додаваме и дигитална продажба.
+          </p>
+        </article>
+
+        <article class="panel feature-panel">
+          <div class="feature-item">
+            <h3>Француски пецива</h3>
+            <p>Кроасани со путер, pain au chocolat и бриош подготвени рачно.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Sourdough леб</h3>
+            <p>Бавна ферментација, крцкава кора и длабок вкус во секоја векна.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Кафе и бистро</h3>
+            <p>Кафе, фокача, чиабата и простор за појадок или кратка пауза.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="menu" class="panel menu-panel">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Мени</p>
+            <h2>Изберете што сакате да нарачате</h2>
+          </div>
+          <p class="section-note">Изборот подолу се користи и во формата за нарачка.</p>
+        </div>
+
+        <div id="menu-grid" class="menu-grid"></div>
+      </section>
+
+      <section id="account" class="account-grid">
+        <article class="panel auth-panel">
+          <div class="section-head">
+            <div>
+              <p class="section-label">Кориснички пристап</p>
+              <h2>Најава и регистрација</h2>
+            </div>
+            <p class="section-note">Само најавени корисници можат да прават нарачки.</p>
+          </div>
+
+          <div class="tabs">
+            <button id="login-tab" class="tab-btn active" type="button">Најава</button>
+            <button id="register-tab" class="tab-btn" type="button">Регистрација</button>
+          </div>
+
+          <form id="login-form" class="stack-form">
+            <label>
+              Email
+              <input type="email" name="email" placeholder="example@email.com" required>
+            </label>
+            <label>
+              Лозинка
+              <div class="password-field">
+                <input type="password" name="password" placeholder="Лозинка" required>
+                <button class="password-toggle" type="button" data-target="login">Покажи</button>
+              </div>
+            </label>
+            <button class="primary-btn" type="submit">Најави се</button>
+          </form>
+
+          <form id="register-form" class="stack-form hidden">
+            <label>
+              Име и презиме
+              <input type="text" name="name" placeholder="Име и презиме" required>
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="example@email.com" required>
+            </label>
+            <label>
+              Телефон
+              <input type="tel" name="phone" placeholder="07x xxx xxx" required>
+            </label>
+            <label>
+              Лозинка
+              <div class="password-field">
+                <input type="password" name="password" placeholder="Лозинка" required>
+                <button class="password-toggle" type="button" data-target="register">Покажи</button>
+              </div>
+            </label>
+            <button class="primary-btn" type="submit">Креирај профил</button>
+          </form>
+
+          <p id="auth-message" class="form-message" aria-live="polite"></p>
+        </article>
+
+        <article class="panel order-panel">
+          <div class="section-head">
+            <div>
+              <p class="section-label">Нарачка</p>
+              <h2>Испратете нарачка</h2>
+            </div>
+            <p class="section-note">Ако не сте најавени, формата ќе биде заклучена.</p>
+          </div>
+
+          <form id="order-form" class="stack-form">
+            <label>
+              Производ
+              <select name="productId" required></select>
+            </label>
+
+            <div class="split">
+              <label>
+                Количина
+                <input type="number" name="quantity" min="1" value="1" required>
+              </label>
+              <label>
+                Тип
+                <select name="deliveryType" required>
+                  <option value="delivery">Достава</option>
+                  <option value="pickup">Подигање од локал</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Адреса или опис за подигање
+              <input type="text" name="address" placeholder="Адреса / белешка за подигање" required>
+            </label>
+
+            <div class="split">
+              <label>
+                Датум
+                <input type="date" name="deliveryDate" required>
+              </label>
+              <label>
+                Време
+                <input type="time" name="deliveryTime" required>
+              </label>
+            </div>
+
+            <label>
+              Забелешка
+              <textarea name="note" rows="4" placeholder="Дополнителна порака"></textarea>
+            </label>
+
+            <button id="order-submit-btn" class="primary-btn" type="submit">Испрати нарачка</button>
+          </form>
+
+          <p id="order-message" class="form-message" aria-live="polite"></p>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel">
+          <div class="section-head">
+            <div>
+              <p class="section-label">Мои нарачки</p>
+              <h2>Историја за најавениот корисник</h2>
+            </div>
+            <p id="user-orders-caption" class="section-note">Најавете се за да ги видите вашите нарачки.</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Датум</th>
+                  <th>Производ</th>
+                  <th>Кол.</th>
+                  <th>Тип</th>
+                  <th>Адреса</th>
+                  <th>Време</th>
+                  <th>Вкупно</th>
+                </tr>
+              </thead>
+              <tbody id="user-orders-body">
+                <tr class="empty-row">
+                  <td colspan="7">Нема активна корисничка сесија.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article id="admin-panel" class="panel hidden">
+          <div class="section-head">
+            <div>
+              <p class="section-label">Админ</p>
+              <h2>Сите нарачки</h2>
+            </div>
+            <div class="action-row">
+              <button id="export-btn" class="secondary-btn" type="button">Симни Excel</button>
+              <button id="clear-btn" class="ghost-btn" type="button">Избриши сè</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Креирано</th>
+                  <th>Клиент</th>
+                  <th>Email</th>
+                  <th>Телефон</th>
+                  <th>Производ</th>
+                  <th>Кол.</th>
+                  <th>Тип</th>
+                  <th>Адреса</th>
+                  <th>Испорака</th>
+                  <th>Вкупно</th>
+                  <th>Забелешка</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-body">
+                <tr class="empty-row">
+                  <td colspan="11">Нема нарачки.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="section-head pending-head">
+            <div>
+              <p class="section-label">Одобрување</p>
+              <h2>Барања за нови корисници</h2>
+            </div>
+            <p class="section-note">Само одобрени корисници можат да се најават и да нарачуваат.</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Име</th>
+                  <th>Email</th>
+                  <th>Телефон</th>
+                  <th>Статус</th>
+                  <th>Креирано</th>
+                  <th>Акции</th>
+                </tr>
+              </thead>
+              <tbody id="pending-users-body">
+                <tr class="empty-row">
+                  <td colspan="6">Нема нови барања.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section id="contact" class="panel contact-panel">
+        <div class="section-head">
+          <div>
+            <p class="section-label">Контакт</p>
+            <h2>Pan Pan Bakery & Bistro Skopje</h2>
+          </div>
+        </div>
+
+        <div class="contact-grid">
+          <div>
+            <p><strong>Адреса:</strong> Ул. Фрањо Клуз бр. 14, Скопје</p>
+            <p><strong>Телефон:</strong> +389 72 261 478</p>
+            <p><strong>Email:</strong> info@panpan.mk</p>
+          </div>
+          <div>
+            <p>
+              Оваа верзија е локална демо апликација. За вистинска употреба со реални клиенти,
+              следен чекор е backend, база и online deployment.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
