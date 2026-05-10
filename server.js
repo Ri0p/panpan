@@ -7,14 +7,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const { createDatabase } = require("./src/db");
-const { syncOrdersCsv } = require("./src/orderExcel");
+const { syncOrderExports } = require("./src/orderExcel");
 const { products } = require("./src/products");
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const jwtSecret = process.env.JWT_SECRET || "panpan-super-secret-key";
 const clientOrigin = process.env.CLIENT_ORIGIN || "";
-const ordersCsvPath = path.join(__dirname, "data", "orders.csv");
+const orderExportPaths = {
+  csvPath: path.join(__dirname, "data", "orders.csv"),
+  templatePath: process.env.EXCEL_TEMPLATE_PATH || path.join(__dirname, "data", "orders-template.xlsx"),
+  xlsxPath: path.join(__dirname, "data", "orders.xlsx")
+};
 
 const db = createDatabase({
   databaseUrl: process.env.DATABASE_URL,
@@ -46,7 +50,7 @@ async function start() {
       passwordHash: bcrypt.hashSync("demo123", 10)
     }
   });
-  await syncOrdersCsv(db, ordersCsvPath);
+  await syncOrderExports(db, orderExportPaths);
 
   app.get("/api/health", (_req, res) => {
     res.json({
@@ -144,7 +148,7 @@ async function start() {
       deliveryTime: String(deliveryTime),
       note: String(note || "").trim()
     });
-    await syncOrdersCsv(db, ordersCsvPath);
+    await syncOrderExports(db, orderExportPaths);
 
     res.status(201).json({ message: "Нарачката е успешно зачувана." });
   }));
@@ -154,13 +158,13 @@ async function start() {
   }));
 
   app.get("/api/admin/orders/excel", authenticate, requireAdmin, asyncHandler(async (_req, res) => {
-    await syncOrdersCsv(db, ordersCsvPath);
-    res.download(ordersCsvPath, `panpan-orders-${new Date().toISOString().slice(0, 10)}.csv`);
+    await syncOrderExports(db, orderExportPaths);
+    res.download(orderExportPaths.xlsxPath, `panpan-orders-${new Date().toISOString().slice(0, 10)}.xlsx`);
   }));
 
   app.delete("/api/admin/orders", authenticate, requireAdmin, asyncHandler(async (_req, res) => {
     await db.clearOrders();
-    await syncOrdersCsv(db, ordersCsvPath);
+    await syncOrderExports(db, orderExportPaths);
     res.json({ message: "Сите нарачки се избришани." });
   }));
 

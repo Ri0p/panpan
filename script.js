@@ -506,7 +506,7 @@ async function downloadAdminOrdersCsv() {
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  const fallbackName = `panpan-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+  const fallbackName = `panpan-orders-${new Date().toISOString().slice(0, 10)}.xlsx`;
 
   link.href = url;
   link.download = getDownloadFilename(response.headers.get("Content-Disposition")) || fallbackName;
