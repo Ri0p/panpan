@@ -7,12 +7,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const { createDatabase } = require("./src/db");
+const { syncOrdersCsv } = require("./src/orderExcel");
 const { products } = require("./src/products");
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const jwtSecret = process.env.JWT_SECRET || "panpan-super-secret-key";
 const clientOrigin = process.env.CLIENT_ORIGIN || "";
+const ordersCsvPath = path.join(__dirname, "data", "orders.csv");
 
 const db = createDatabase({
   databaseUrl: process.env.DATABASE_URL,
@@ -44,6 +46,7 @@ async function start() {
       passwordHash: bcrypt.hashSync("demo123", 10)
     }
   });
+  await syncOrdersCsv(db, ordersCsvPath);
 
   app.get("/api/health", (_req, res) => {
     res.json({
@@ -141,6 +144,7 @@ async function start() {
       deliveryTime: String(deliveryTime),
       note: String(note || "").trim()
     });
+    await syncOrdersCsv(db, ordersCsvPath);
 
     res.status(201).json({ message: "Нарачката е успешно зачувана." });
   }));
@@ -149,8 +153,14 @@ async function start() {
     res.json({ orders: await db.listOrders() });
   }));
 
+  app.get("/api/admin/orders/excel", authenticate, requireAdmin, asyncHandler(async (_req, res) => {
+    await syncOrdersCsv(db, ordersCsvPath);
+    res.download(ordersCsvPath, `panpan-orders-${new Date().toISOString().slice(0, 10)}.csv`);
+  }));
+
   app.delete("/api/admin/orders", authenticate, requireAdmin, asyncHandler(async (_req, res) => {
     await db.clearOrders();
+    await syncOrdersCsv(db, ordersCsvPath);
     res.json({ message: "Сите нарачки се избришани." });
   }));
 

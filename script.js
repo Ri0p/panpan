@@ -131,7 +131,15 @@ orderForm.addEventListener("submit", async (event) => {
 });
 
 if (exportBtn) {
-  exportBtn.addEventListener("click", () => {
+  exportBtn.addEventListener("click", async () => {
+    try {
+      await downloadAdminOrdersCsv();
+      return;
+    } catch (error) {
+      showMessage(orderMessage, error.message, "error");
+      return;
+    }
+
     if (!adminOrders.length) {
       showMessage(orderMessage, "Нема нарачки за export.", "error");
       return;
@@ -482,6 +490,37 @@ function formatDateTime(isoValue) {
     hour: "2-digit",
     minute: "2-digit"
   });
+}
+
+async function downloadAdminOrdersCsv() {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const response = await fetch("/api/admin/orders/excel", {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || "Excel export failed.");
+  }
+
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const fallbackName = `panpan-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+
+  link.href = url;
+  link.download = getDownloadFilename(response.headers.get("Content-Disposition")) || fallbackName;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function getDownloadFilename(contentDisposition) {
+  if (!contentDisposition) {
+    return "";
+  }
+
+  const match = contentDisposition.match(/filename="?([^"]+)"?/i);
+  return match ? match[1] : "";
 }
 
 function downloadCsv(rows, filename) {
