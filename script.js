@@ -10,7 +10,12 @@ const authMessage = document.getElementById("auth-message");
 const orderForm = document.getElementById("order-form");
 const orderMessage = document.getElementById("order-message");
 const sessionBadge = document.getElementById("session-badge");
+const authLink = document.getElementById("auth-link");
+const ordersLink = document.getElementById("orders-link");
 const logoutBtn = document.getElementById("logout-btn");
+const accountView = document.getElementById("account");
+const ordersView = document.getElementById("orders");
+const publicViews = document.querySelectorAll("#home, #about, #menu, #contact");
 const userOrdersBody = document.getElementById("user-orders-body");
 const userOrdersCaption = document.getElementById("user-orders-caption");
 const adminPanel = document.getElementById("admin-panel");
@@ -33,6 +38,7 @@ bootstrap().catch(() => {
 
 loginTab.addEventListener("click", () => setAuthMode("login"));
 registerTab.addEventListener("click", () => setAuthMode("register"));
+window.addEventListener("hashchange", renderRoute);
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -54,6 +60,7 @@ loginForm.addEventListener("submit", async (event) => {
     await refreshSession();
     await refreshData();
     renderApp();
+    window.location.hash = "orders";
     showMessage(authMessage, `Успешно се најавивте како ${response.user.name}.`, "success");
   } catch (error) {
     showMessage(authMessage, error.message, "error");
@@ -92,6 +99,7 @@ logoutBtn.addEventListener("click", async () => {
   adminOrders = [];
   pendingUsers = [];
   renderApp();
+  window.location.hash = "home";
   showMessage(authMessage, "Успешно се одјавивте.", "success");
 });
 
@@ -256,9 +264,26 @@ async function refreshData() {
 
 function renderApp() {
   updateSessionBadge();
+  renderRoute();
   toggleOrderState();
   renderUserOrders();
   renderAdminOrders();
+}
+
+function renderRoute() {
+  const hash = window.location.hash || "#home";
+  const isAccountRoute = hash === "#account";
+  const isOrdersRoute = hash === "#orders";
+  const showPrivateView = isAccountRoute || isOrdersRoute;
+
+  if (isOrdersRoute && !sessionUser) {
+    window.location.hash = "account";
+    return;
+  }
+
+  publicViews.forEach((section) => section.classList.toggle("hidden", showPrivateView));
+  accountView.classList.toggle("hidden", !isAccountRoute);
+  ordersView.classList.toggle("hidden", !isOrdersRoute);
 }
 
 function renderMenu() {
@@ -403,12 +428,18 @@ function renderPendingUsers() {
 function updateSessionBadge() {
   if (!sessionUser) {
     sessionBadge.textContent = "Не сте најавени";
+    sessionBadge.classList.add("hidden");
+    authLink.classList.remove("hidden");
+    ordersLink.classList.add("hidden");
     logoutBtn.classList.add("hidden");
     return;
   }
 
   const roleLabel = sessionUser.role === "admin" ? "Admin" : "Клиент";
   sessionBadge.textContent = `${sessionUser.name} · ${roleLabel}`;
+  sessionBadge.classList.remove("hidden");
+  authLink.classList.add("hidden");
+  ordersLink.classList.remove("hidden");
   logoutBtn.classList.remove("hidden");
 }
 

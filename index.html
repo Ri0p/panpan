@@ -22,11 +22,12 @@
         <a href="#about">За Нас</a>
         <a href="#menu">Мени</a>
         <a href="#contact">Контакт</a>
-        <a href="#account">Профил</a>
       </nav>
 
       <div class="header-actions">
-        <span id="session-badge" class="session-badge">Не сте најавени</span>
+        <span id="session-badge" class="session-badge hidden">Не сте најавени</span>
+        <a id="auth-link" class="primary-btn" href="#account">Најави се / Регистрирај се</a>
+        <a id="orders-link" class="secondary-btn hidden" href="#orders">Нарачки</a>
         <button id="logout-btn" class="ghost-btn hidden" type="button">Одјава</button>
       </div>
     </header>
@@ -35,27 +36,25 @@
       <section id="home" class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Artisan Bakery</p>
-          <h1>Свежи француски пецива и онлајн нарачка на едно место</h1>
+          <h1>Свежи француски пецива, леб и бистро моменти</h1>
           <p class="lead">
-            Оваа демо копија е инспирирана од `panpan.mk`, но додава вистински тек за корисници:
-            најава, профил, нарачка и админ преглед со Excel извоз.
+            Pan Pan е место за свежо печен леб, кроасани, фокача и кафе во текот на денот.
+            Погледнете го менито или најавете се за клиентски пристап.
           </p>
           <div class="hero-actions">
-            <a class="primary-btn" href="#account">Најава / Регистрација</a>
+            <a class="primary-btn" href="#account">Најави се / Регистрирај се</a>
             <a class="secondary-btn" href="#menu">Погледни мени</a>
           </div>
         </div>
 
         <aside class="hero-card">
-          <p class="card-title">Демо пристап</p>
-          <p><strong>Admin:</strong> `admin@panpan.mk` / `panpan123`</p>
-          <p><strong>Клиент:</strong> `demo@panpan.mk` / `demo123`</p>
-          <p>Нови регистрации одат на одобрување кај админ пред корисникот да може да се најави.</p>
+          <p class="card-title">Свежо печено секој ден</p>
+          <p>Рачно подготвени пецива, леб со долга ферментација и кафе за утро, пауза или бистро појадок.</p>
           <ul>
-            <li>Најава и регистрација</li>
-            <li>Нарачки за достава или подигање</li>
-            <li>Историја на нарачки по корисник</li>
-            <li>Админ табела и Excel export</li>
+            <li>Кроасани и pain au chocolat</li>
+            <li>Sourdough и дневен леб</li>
+            <li>Фокача, чиабата и бриош</li>
+            <li>Кафе и бистро избор</li>
           </ul>
         </aside>
       </section>
@@ -90,15 +89,15 @@
         <div class="section-head">
           <div>
             <p class="section-label">Мени</p>
-            <h2>Изберете што сакате да нарачате</h2>
+            <h2>Нашето мени</h2>
           </div>
-          <p class="section-note">Изборот подолу се користи и во формата за нарачка.</p>
+          <p class="section-note">Погледнете дел од производите што Pan Pan ги подготвува свежи секој ден.</p>
         </div>
 
         <div id="menu-grid" class="menu-grid"></div>
       </section>
 
-      <section id="account" class="account-grid">
+      <section id="account" class="account-grid private-view hidden">
         <article class="panel auth-panel">
           <div class="section-head">
             <div>
@@ -154,6 +153,9 @@
           <p id="auth-message" class="form-message" aria-live="polite"></p>
         </article>
 
+      </section>
+
+      <section id="orders" class="dashboard-grid private-view hidden">
         <article class="panel order-panel">
           <div class="section-head">
             <div>
@@ -209,9 +211,6 @@
 
           <p id="order-message" class="form-message" aria-live="polite"></p>
         </article>
-      </section>
-
-      <section class="dashboard-grid">
         <article class="panel">
           <div class="section-head">
             <div>

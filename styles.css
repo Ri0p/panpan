@@ -257,7 +257,9 @@ td {
 }
 
 .account-grid {
-  grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+  max-width: 720px;
+  margin: 0 auto;
+  grid-template-columns: 1fr;
 }
 
 .dashboard-grid {
