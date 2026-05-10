@@ -134,36 +134,9 @@ if (exportBtn) {
   exportBtn.addEventListener("click", async () => {
     try {
       await downloadAdminOrdersCsv();
-      return;
     } catch (error) {
       showMessage(orderMessage, error.message, "error");
-      return;
     }
-
-    if (!adminOrders.length) {
-      showMessage(orderMessage, "Нема нарачки за export.", "error");
-      return;
-    }
-
-    const csvRows = [
-      ["Креирано", "Клиент", "Email", "Телефон", "Производ", "Количина", "Тип", "Адреса", "Датум", "Време", "Вкупно", "Забелешка"],
-      ...adminOrders.map((order) => [
-        formatDateTime(order.createdAt),
-        order.customerName,
-        order.email,
-        order.phone,
-        order.productName,
-        order.quantity,
-        order.deliveryType === "delivery" ? "Достава" : "Подигање",
-        order.address,
-        order.deliveryDate,
-        order.deliveryTime,
-        Number(order.totalPrice).toFixed(2),
-        order.note
-      ])
-    ];
-
-    downloadCsv(csvRows, `panpan-orders-${new Date().toISOString().slice(0, 10)}.csv`);
   });
 }
 
@@ -295,7 +268,6 @@ function renderMenu() {
         <p class="section-label">Pan Pan</p>
         <h3>${escapeHtml(product.name)}</h3>
         <p>${escapeHtml(product.description)}</p>
-        <span class="price-tag">${product.price} ден</span>
       </article>
     `)
     .join("");
@@ -303,7 +275,7 @@ function renderMenu() {
 
 function fillProductOptions() {
   productSelect.innerHTML = products
-    .map((product) => `<option value="${product.id}">${escapeHtml(product.name)} - ${product.price} ден</option>`)
+    .map((product) => `<option value="${product.id}">${escapeHtml(product.name)}</option>`)
     .join("");
 }
 
@@ -332,7 +304,7 @@ function renderUserOrders() {
     userOrdersCaption.textContent = "Најавете се за да ги видите вашите нарачки.";
     userOrdersBody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="7">Нема активна корисничка сесија.</td>
+        <td colspan="6">Нема активна корисничка сесија.</td>
       </tr>
     `;
     return;
@@ -343,7 +315,7 @@ function renderUserOrders() {
   if (!userOrders.length) {
     userOrdersBody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="7">Сè уште немате нарачки.</td>
+        <td colspan="6">Сè уште немате нарачки.</td>
       </tr>
     `;
     return;
@@ -358,7 +330,6 @@ function renderUserOrders() {
         <td>${order.deliveryType === "delivery" ? "Достава" : "Подигање"}</td>
         <td>${escapeHtml(order.address)}</td>
         <td>${escapeHtml(`${order.deliveryDate} ${order.deliveryTime}`)}</td>
-        <td>${Number(order.totalPrice).toFixed(2)} ден</td>
       </tr>
     `)
     .join("");
@@ -375,7 +346,7 @@ function renderAdminOrders() {
   if (!adminOrders.length) {
     adminOrdersBody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="11">Нема нарачки.</td>
+        <td colspan="10">Нема нарачки.</td>
       </tr>
     `;
   } else {
@@ -391,7 +362,6 @@ function renderAdminOrders() {
           <td>${order.deliveryType === "delivery" ? "Достава" : "Подигање"}</td>
           <td>${escapeHtml(order.address)}</td>
           <td>${escapeHtml(`${order.deliveryDate} ${order.deliveryTime}`)}</td>
-          <td>${Number(order.totalPrice).toFixed(2)} ден</td>
           <td>${escapeHtml(order.note)}</td>
         </tr>
       `)
@@ -521,21 +491,6 @@ function getDownloadFilename(contentDisposition) {
 
   const match = contentDisposition.match(/filename="?([^"]+)"?/i);
   return match ? match[1] : "";
-}
-
-function downloadCsv(rows, filename) {
-  const csv = rows
-    .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(","))
-    .join("\n");
-
-  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
 }
 
 function showMessage(element, text, type) {
